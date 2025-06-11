@@ -1,7 +1,27 @@
 # Lab Management System
 
 
-## Kullanici Kayit ve Giris
+- JWT tabanli kimlik dogrulama
+
+### Kayit Olma
+```bash
+curl -X POST http://localhost:8000/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"alice","email":"alice@example.com","password":"secret","role":"student"}'
+```
+
+### Giris Yapma
+```bash
+curl -X POST http://localhost:8000/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d 'username=alice&password=secret'
+```
+Sonucunda `access_token` doner.
+
+### Kimligimi Dogrula
+```bash
+curl http://localhost:8000/me -H "Authorization: Bearer <TOKEN>"
+```
 
 Bir kullanici olusturmak icin `/register` endpoint'ini kullanin:
 

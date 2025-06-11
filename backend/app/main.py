@@ -1,13 +1,34 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import Session, select
-from jose import JWTError, jwt
+from jose import jwt, JWTError
+
 from .models.user import User, UserCreate
-def get_current_user(
-    token: str = Depends(oauth2_scheme), session: Session = Depends(get_session)
-):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
+def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Depends(get_session)):
+    try:
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        username: str = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    user = session.exec(select(User).where(User.username == username)).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+    return user
+
+
+    access_token = create_access_token({"sub": user.username, "role": user.role})
+@app.post("/register", status_code=201)
+def register(user_in: UserCreate, session: Session = Depends(get_session)):
+    existing = session.exec(select(User).where(User.username == user_in.username)).first()
+    user = User(username=user_in.username, email=user_in.email, role=user_in.role, hashed_password=get_password_hash(user_in.password))
+    return {"id": user.id, "username": user.username, "email": user.email, "role": user.role}
+
+
+@app.get("/me")
+def read_me(current_user: User = Depends(get_current_user)):
+    return {"username": current_user.username, "email": current_user.email, "role": current_user.role}
         detail="Could not validate credentials",
     )
     try:

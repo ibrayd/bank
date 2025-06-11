@@ -1,9 +1,18 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
+from pydantic import EmailStr
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str
+    email: EmailStr
+
+
+class UserCreate(SQLModel):
+    username: str
+    email: EmailStr
+    password: str
+    role: str = "student"
     email: str
 
 
