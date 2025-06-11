@@ -1,6 +1,30 @@
 # Lab Management System
 
 
+
+## Kullanici Kayit ve Giris
+
+Kullanici kaydi icin ornek istek:
+
+```bash
+curl -X POST http://localhost:8000/register \
+  -H "Content-Type: application/json" \
+  -d '{"username": "alice", "email": "alice@example.com", "password": "secret", "role": "student"}'
+```
+
+Giris yapmak icin:
+
+```bash
+curl -X POST http://localhost:8000/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=alice&password=secret"
+```
+
+Donen `access_token` degeri Authorization basliginda `Bearer` olarak gonderilerek `/me` uzerinden mevcut kullanici bilgileri alinabilir:
+
+```bash
+curl http://localhost:8000/me -H "Authorization: Bearer <token>"
+```
 - JWT tabanli kimlik dogrulama
 
 ### Kayit Olma

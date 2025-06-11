@@ -1,5 +1,12 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
+class UserCreate(SQLModel):
+    username: str
+    email: str
+    password: str
+    role: str = "student"
+
+    email: str
 from pydantic import EmailStr
 
 class User(SQLModel, table=True):
