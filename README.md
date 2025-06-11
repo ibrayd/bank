@@ -1,5 +1,29 @@
 # Lab Management System
 
+
+## Kullanici Kayit ve Giris
+
+Bir kullanici olusturmak icin `/register` endpoint'ini kullanin:
+
+```bash
+curl -X POST http://localhost:8000/register \
+  -H "Content-Type: application/json" \
+  -d '{"username": "alice", "email": "alice@example.com", "password": "secret", "role": "student"}'
+```
+
+Giris yapmak icin `/token` endpoint'ine kullanici adi ve sifre gonderin:
+
+```bash
+curl -X POST http://localhost:8000/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=alice&password=secret"
+```
+
+Token'i kullanarak oturum acmis kullaniciyi `/me` ile gorebilirsiniz:
+
+```bash
+curl http://localhost:8000/me -H "Authorization: Bearer <TOKEN>"
+```
 Bu depo, FastAPI ve React kullanarak gelistirilecek bir Laboratuvar Yonetim Sistemi icin temel bir iskelet sunar.
 
 ## Docker Compose ile Calistirma

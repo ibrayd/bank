@@ -13,6 +13,14 @@ class UserCreate(SQLModel):
     password: str
     role: str = "student"
     email: str
+
+
+class UserCreate(SQLModel):
+    username: str
+    email: str
+    password: str
+    role: str = "student"
+    email: str
     hashed_password: str
     role: str = "student"  # or 'professor'
 

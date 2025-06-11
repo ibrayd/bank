@@ -3,11 +3,54 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 from jose import JWTError, jwt
 from .models.user import User, UserCreate
-
-def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Depends(get_session)):
+def get_current_user(
+    token: str = Depends(oauth2_scheme), session: Session = Depends(get_session)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
+    )
+    try:
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        username: str | None = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    user = session.exec(select(User).where(User.username == username)).first()
+    if user is None:
+        raise credentials_exception
+    return user
+
+
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    session: Session = Depends(get_session),
+):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+        )
+    access_token = create_access_token({"sub": user.username, "role": user.role})
+def register(user_in: UserCreate, session: Session = Depends(get_session)):
+    existing = session.exec(select(User).where(User.username == user_in.username)).first()
+    user = User(
+        username=user_in.username,
+        email=user_in.email,
+        hashed_password=get_password_hash(user_in.password),
+        role=user_in.role,
+    )
+@app.get("/me")
+def read_me(current_user: User = Depends(get_current_user)):
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email,
+        "role": current_user.role,
+    }
+
+
+
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
