@@ -1,11 +1,32 @@
 import React from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Login from './Login'
+import StudentDashboard from './StudentDashboard'
+import ProfessorDashboard from './ProfessorDashboard'
 
-function App() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-2xl font-bold">Lab Management System</h1>
-    </div>
-  )
+function PrivateRoute({ children }) {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return <Navigate to="/login" />
+  }
+  return children
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/student-dashboard"
+          element={<PrivateRoute><StudentDashboard /></PrivateRoute>}
+        />
+        <Route
+          path="/professor-dashboard"
+          element={<PrivateRoute><ProfessorDashboard /></PrivateRoute>}
+        />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
