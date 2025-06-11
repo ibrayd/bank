@@ -8,6 +8,14 @@ class UserCreate(SQLModel):
     email: str
     password: str
     role: str = "student"
+    email: str
+
+
+class UserCreate(SQLModel):
+    username: str
+    email: str
+    password: str
+    role: str = "student"
 class UserCreate(SQLModel):
     username: str
     email: str

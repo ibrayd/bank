@@ -2,6 +2,28 @@
 
 
 
+### Kayit Olma
+
+```bash
+curl -X POST http://localhost:8000/register \
+    -H "Content-Type: application/json" \
+    -d '{"username": "alice", "email": "alice@example.com", "password": "secret", "role": "student"}'
+```
+
+### Giris Yapma
+
+```bash
+curl -X POST http://localhost:8000/token \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d "username=alice&password=secret"
+```
+
+### Kimligi Dogrulanmis Kullanici
+
+```bash
+curl http://localhost:8000/me -H "Authorization: Bearer <TOKEN>"
+```
+
 ### Kayit ve Giris Ornekleri
 
 Kullanici kaydi icin:
