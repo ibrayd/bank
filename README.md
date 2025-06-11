@@ -2,7 +2,34 @@
 
 
 
-### Kayit Olma
+- JWT tabanli kimlik dogrulama
+- /register, /token ve /me endpoint'leri
+
+
+### Ornek Kullanım
+
+Kullanici kaydetmek icin:
+
+```bash
+curl -X POST http://localhost:8000/register \
+  -H 'Content-Type: application/json' \
+  -d '{"username": "alice", "email": "a@example.com", "password": "secret", "role": "student"}'
+```
+
+Giris yapip token almak icin:
+
+```bash
+curl -X POST http://localhost:8000/token \
+  -d 'username=alice&password=secret' \
+  -H 'Content-Type: application/x-www-form-urlencoded'
+```
+
+Token ile oturum acmis kullaniciyi almak icin:
+
+```bash
+curl http://localhost:8000/me \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
 ```bash
 curl -X POST http://localhost:8000/register \

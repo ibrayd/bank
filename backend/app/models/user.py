@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
     email: str
+    email: str
 
 
 class UserCreate(SQLModel):
