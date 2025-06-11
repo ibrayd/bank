@@ -1,5 +1,13 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
+    email: str
+
+
+class UserCreate(SQLModel):
+    username: str
+    email: str
+    password: str
+    role: str = "student"
 class UserCreate(SQLModel):
     username: str
     email: str

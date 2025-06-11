@@ -2,6 +2,29 @@
 
 
 
+### Kayit ve Giris Ornekleri
+
+Kullanici kaydi icin:
+
+```bash
+curl -X POST http://localhost:8000/register \
+  -H "Content-Type: application/json" \
+  -d '{"username": "demo", "email": "demo@example.com", "password": "secret", "role": "student"}'
+```
+
+Giris yapip token almak icin:
+
+```bash
+curl -X POST http://localhost:8000/token \
+  -F "username=demo" -F "password=secret"
+```
+
+Alinan JWT token ile oturum acmis kullaniciyi almak icin:
+
+```bash
+curl http://localhost:8000/me -H "Authorization: Bearer <TOKEN>"
+```
+
 ## Kullanici Kayit ve Giris
 
 Kullanici kaydi icin ornek istek:
